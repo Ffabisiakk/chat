@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.io.PrintStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -20,7 +21,7 @@ public class Server {
         new Server(5000).run();
     }
 
-    public void run() throws IOException {
+    private void run() throws IOException {
         server = new ServerSocket(port);
         System.out.println("Connnection established with port " + port);
 
@@ -29,7 +30,6 @@ public class Server {
             System.out.println("Connection accepted from " + userSocket);
 
             Scanner scanner = new Scanner(userSocket.getInputStream());
-            System.out.println("Welcome in chat\nChoose nickname:");
 
             String nickname = scanner.nextLine();
 
@@ -41,12 +41,26 @@ public class Server {
         }
     }
 
-    protected void sendToAll(String message, User sender) {
-
+    void sendToAll(String message, User sender) {
+        for (User u : users) {
+            PrintStream out = u.getOutStream();
+            out.print(sender.toString() + " >> " + message);
+        }
     }
 
-    protected void sendToPrivate(String message, User sender, String Receiver) {
+    void sendToPrivate(String message, User sender, String receiver) {
 
+        boolean validReceiver = false;
+        for (User u : users) {
+            if (u.getNickname().equals(receiver)) {
+                validReceiver = true;
+                u.getOutStream().print(sender.toString() + " -> " + receiver + " >> " + message);
+                break;
+            }
+        }
+        if (!validReceiver) {
+            sender.getOutStream().print("There is o such user: " + receiver);
+        }
     }
 
 }

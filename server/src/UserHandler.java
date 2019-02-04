@@ -1,4 +1,3 @@
-import java.util.List;
 import java.util.Scanner;
 
 public class UserHandler implements Runnable {
@@ -14,7 +13,6 @@ public class UserHandler implements Runnable {
     @Override
     public void run() {
         Scanner scanner = new Scanner(user.getInputStream());
-
         String message;
 
         while (scanner.hasNextLine()) {
