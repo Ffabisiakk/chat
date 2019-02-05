@@ -43,10 +43,22 @@ public class Server {
 
     void sendToAll(String message, User sender) {
         for (User u : users) {
+            if (u != sender) {
+                PrintStream out = u.getOutStream();
+                out.println(sender.toString() + " >> " + message);
+            }
+        }
+        System.out.println("Log: " + sender.getNickname() + " >> ALL : " + message);
+    }
+
+    void sendToAll(String message) {
+        for (User u : users) {
             PrintStream out = u.getOutStream();
-            out.print(sender.toString() + " >> " + message);
+            out.println(message);
+            System.out.println("Log: " + message);
         }
     }
+
 
     void sendToPrivate(String message, User sender, String receiver) {
 
@@ -54,13 +66,18 @@ public class Server {
         for (User u : users) {
             if (u.getNickname().equals(receiver)) {
                 validReceiver = true;
-                u.getOutStream().print(sender.toString() + " -> " + receiver + " >> " + message);
+                u.getOutStream().println(sender.toString() + " -> " + receiver + " >> " + message);
+                System.out.println("Log: " + sender.getNickname() + " >> " + receiver + " : " + message);
                 break;
             }
         }
         if (!validReceiver) {
-            sender.getOutStream().print("There is o such user: " + receiver);
+            sender.getOutStream().println("There is no such user: " + receiver);
         }
     }
 
+
+    public List<User> getUsers() {
+        return users;
+    }
 }

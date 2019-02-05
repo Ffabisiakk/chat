@@ -27,8 +27,8 @@ public class Client {
         Scanner scanner = new Scanner(System.in);
         System.out.print("Choose nickname:");
         String nickname = scanner.nextLine();
-
         output.println(nickname);
+        System.out.println("Welcome " + nickname);
 
         Thread t = new Thread(new ServerHandler(inputServer));
         t.start();

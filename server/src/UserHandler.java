@@ -20,10 +20,13 @@ public class UserHandler implements Runnable {
 
             if (message.charAt(0) == '@') {
                 if (message.contains(" ")) {
-                    int firstSpaceOccure = message.indexOf(" ");
-                    String receiver = message.substring(1, firstSpaceOccure);
-                    server.sendToPrivate(message.substring(firstSpaceOccure + 1), user, receiver);
+                    int firstSpaceOccur = message.indexOf(" ");
+                    String receiver = message.substring(1, firstSpaceOccur);
+                    server.sendToPrivate(message.substring(firstSpaceOccur + 1), user, receiver);
                 }
+            } else if (message.equalsIgnoreCase("!quit")) {
+                server.getUsers().remove(user);
+                server.sendToAll(user.getNickname() + " has logout.");
             } else {
                 server.sendToAll(message, user);
             }
